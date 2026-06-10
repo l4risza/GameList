@@ -1,34 +1,32 @@
-import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import Listas from './pages/Listas'
+import DetalheLista from './pages/DetalheLista'
 
-function App() {
-  const [jogos, setJogos] = useState([]);
-
-  useEffect(() => {
-    async function carregarJogos() {
-      const { data, error } = await supabase
-        .from("jogos")
-        .select("*");
-
-      if (!error) {
-        setJogos(data);
-      }
-    }
-
-    carregarJogos();
-  }, []);
-
-  return (
-    <>
-      <h1>Lista de Jogos</h1>
-
-      {jogos.map((jogo) => (
-        <div key={jogo.jogo_id}>
-          {jogo.titulo}
-        </div>
-      ))}
-    </>
-  );
+function RotaProtegida({ children }) {
+  const { user } = useAuth()
+  return user ? children : <Navigate to="/login" replace />
 }
 
-export default App;
+function RotaPublica({ children }) {
+  const { user } = useAuth()
+  return !user ? children : <Navigate to="/listas" replace />
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/listas" replace />} />
+          <Route path="/login" element={<RotaPublica><Login /></RotaPublica>} />
+          <Route path="/signup" element={<RotaPublica><SignUp /></RotaPublica>} />
+          <Route path="/listas" element={<RotaProtegida><Listas /></RotaProtegida>} />
+          <Route path="/listas/:id" element={<RotaProtegida><DetalheLista /></RotaProtegida>} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  )
+}
