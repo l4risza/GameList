@@ -68,29 +68,17 @@ PRIMARY KEY (lista_id, jogo_id)
 npm install
 ```
 
-### 2. Criar o arquivo `.env` na raiz do projeto com as seguintes variáveis
+### 2. Criar o arquivo `.env` na raiz do projeto com as variáveis de ambiente
 
 ```env
 VITE_SUPABASE_URL=https://SEU_PROJETO.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=SUA_CHAVE_ANON_AQUI
 ```
 
-Os valores se encontram em:
-
-```text
-Supabase → Settings → API
-```
-
 ### 3. Rodar o projeto em modo desenvolvimento
 
 ```bash
 npm run dev
-```
-
-O projeto estará disponível em:
-
-```text
-http://localhost:5173
 ```
 
 ## FUNCIONALIDADES
